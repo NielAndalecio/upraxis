@@ -1,11 +1,20 @@
 import { Button, Checkbox, Form, Input, Space } from 'antd'
 import React from 'react'
+import redirectTo from '../utils/redirect'
 
 function Login() {
   return (
     <>
-      <Space align="center">
-        <b>Upraxis</b>
+      <Space
+        align="center"
+        direction="vertical"
+        style={{
+          padding: '20px 50px',
+          borderRadius: '10px',
+          backgroundColor: '#FAFAFA',
+        }}
+      >
+        <h2>Upraxis</h2>
         <Form
           name="basic"
           labelCol={{ span: 8 }}
@@ -13,6 +22,10 @@ function Login() {
           style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
           autoComplete="off"
+          onFinish={async (data) => {
+            console.log({ data })
+            redirectTo('/')
+          }}
         >
           <Form.Item
             label="Username"
