@@ -1,10 +1,8 @@
 import { Button, Space, Table } from 'antd'
 import React from 'react'
 import Password from '../components/password'
-import store from '../store'
 
 function Members() {
-  const dispatch = store.dispatch()
   const dataSource = [
     {
       key: '1',
@@ -35,7 +33,6 @@ function Members() {
       passsword: 'FD3233',
     },
   ]
-  const handleOpenModal = () => {}
   const columns = [
     {
       title: 'Authorized Personnel',
