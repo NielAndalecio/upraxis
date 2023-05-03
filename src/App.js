@@ -1,15 +1,16 @@
 import { Layout, Space } from 'antd'
 import Sider from 'antd/es/layout/Sider'
-import { Provider } from 'react-redux'
-import { Route, Routes } from 'react-router'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Link, Route, Routes } from 'react-router-dom'
 import NotFound from './404'
+import { useAuth } from './common/hooks/useAuth'
 import { ModalProvider } from './common/hooks/useModal'
+import { Logo } from './components/icons/logo'
 import './index.css'
 import Index from './pages'
 import Login from './pages/login'
 import Members from './pages/members'
-import store from './store'
+import redirectTo from './utils/redirect'
 
 const linkStyle = {
   color: '#bbd1b8',
@@ -18,18 +19,20 @@ const linkStyle = {
 }
 
 function App() {
+  const isAuth = useAuth()
+  const dispatch = useDispatch()
   return (
-    <Provider store={store}>
-      <ModalProvider>
-        <Layout
-          style={{
-            width: '100vw',
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
+    <ModalProvider>
+      <Layout
+        style={{
+          width: '100vw',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        {isAuth && (
           <Sider
             style={{
               height: '100vh',
@@ -47,36 +50,45 @@ function App() {
                 color: '#1b1b1c',
               }}
             >
+              <Logo />
               <Link style={linkStyle} to={{ pathname: '/' }}>
                 Dashboard
               </Link>
               <Link style={linkStyle} to={{ pathname: '/members' }}>
                 Members
               </Link>
-              <Link style={linkStyle} to={{ pathname: '/login' }}>
+              <Link
+                style={linkStyle}
+                onClick={() => {
+                  dispatch({
+                    type: 'USER_LOGOUT',
+                  })
+                  localStorage.removeItem('isLogin')
+                  redirectTo('/')
+                }}
+              >
                 logout
               </Link>
             </Space>
           </Sider>
-          <Space
-            style={{
-              width: '100vw',
-              height: '100vh',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}
-          >
-            <Routes>
-              <Route index path="/" element={<Index />} />
-              <Route path="/members" element={<Members />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Space>
-        </Layout>
-      </ModalProvider>
-    </Provider>
+        )}
+        <Space
+          style={{
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <Routes>
+            <Route path="/" element={isAuth ? <Index /> : <Login />} />
+            <Route path="/members" element={isAuth ? <Members /> : <Login />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Space>
+      </Layout>
+    </ModalProvider>
   )
 }
 

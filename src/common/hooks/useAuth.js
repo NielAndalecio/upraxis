@@ -1,17 +1,12 @@
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 
-const authContext = createContext
-
-export const AuthProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useState(false)
-  const authMemo = useMemo(() => ({ isAuth, update: setIsAuth }), [])
-
-  return (
-    <authContext.Provider value={authMemo}>{children}</authContext.Provider>
-  )
-}
-
-export const useAuthProvider = () => {
-  const { isAuth, update } = useContext(authContext)
-  return { isAuth, update }
+export const useAuth = () => {
+  const stateLogin = useSelector((state) => state.user.isLogin)
+  const isLogin = localStorage.getItem('isLogin') ?? stateLogin
+  if (isLogin) {
+    localStorage.setItem('isLogin', true)
+  } else {
+    localStorage.removeItem('isLogin')
+  }
+  return isLogin
 }

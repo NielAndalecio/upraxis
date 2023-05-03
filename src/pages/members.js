@@ -1,38 +1,40 @@
 import { Button, Space, Table } from 'antd'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import React from 'react'
+import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import Password from '../components/password'
+import { db } from '../firebase'
 
 function Members() {
-  const dataSource = [
-    {
-      key: '1',
-      authPerson: 'Niel',
-      role: 'Admin',
-      idNumber: 'A1',
-      passsword: 'ASA121',
-    },
-    {
-      key: '2',
-      authPerson: 'Niel',
-      role: 'Admin',
-      idNumber: 'A2',
-      passsword: 'SD223',
-    },
-    {
-      key: '3',
-      authPerson: 'Niel',
-      role: 'Admin',
-      idNumber: 'A3',
-      passsword: 'DFD22SA',
-    },
-    {
-      key: '4',
-      authPerson: 'Niel',
-      role: 'Admin',
-      idNumber: 'A4',
-      passsword: 'FD3233',
-    },
-  ]
+  const [members, setMembers] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
+  const membersCollectionRef = collection(db, 'Members')
+
+  React.useEffect(() => {
+    const fetchMembers = async () => {
+      const user = await getDocs(
+        query(membersCollectionRef, where('username', '==', 'Niel'))
+      )
+      const userData = user.docs.map((doc) => ({ ...doc.data() }))
+
+      const data = await getDocs(membersCollectionRef)
+
+      setMembers(
+        data.docs.map((doc) => ({
+          key: doc.id,
+          authPerson: doc.data().username,
+          role: doc.data().role,
+          idNumber: doc.data().idNumber,
+          password: doc.data().password,
+        }))
+      )
+    }
+
+    fetchMembers().then(() => {
+      setLoading(false)
+    })
+  }, [])
+
   const columns = [
     {
       title: 'Authorized Personnel',
@@ -51,10 +53,26 @@ function Members() {
     },
     {
       title: 'Password',
-      dataIndex: 'passsword',
-      key: 'passsword',
+      dataIndex: 'password',
+      key: 'password',
       render: (text, record) => {
         return <Password text={text} />
+      },
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, record) => {
+        return (
+          <Space>
+            <Button>
+              <AiOutlineEdit />
+            </Button>
+            <Button>
+              <AiOutlineDelete />
+            </Button>
+          </Space>
+        )
       },
     },
   ]
@@ -67,8 +85,9 @@ function Members() {
       <Table
         bordered={true}
         columns={columns}
-        dataSource={dataSource}
+        dataSource={members ?? []}
         style={{ width: '80vw' }}
+        loading={loading}
       />
     </div>
   )

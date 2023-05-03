@@ -1,7 +1,32 @@
 import { Table } from 'antd'
-import React from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+import React, { useState } from 'react'
+import { db } from '../firebase'
 
 function Index() {
+  const [tableData, setTableData] = useState([])
+  const [loading, setLoading] = React.useState(true)
+  const clockCollectionRef = collection(db, 'ClockSystem')
+
+  React.useEffect(() => {
+    const fetchMembers = async () => {
+      const data = await getDocs(clockCollectionRef)
+      setTableData(
+        data.docs.map((doc) => ({
+          key: doc.id,
+          authPerson: doc.data().username,
+          timeIn: doc.data().timeIn,
+          timeOut: doc.data().timeOut,
+          date: doc.data().date,
+        }))
+      )
+    }
+
+    fetchMembers().then(() => {
+      setLoading(false)
+    })
+  }, [])
+
   const dataSource = [
     {
       key: '1',
@@ -74,7 +99,8 @@ function Index() {
       <Table
         bordered={true}
         columns={columns}
-        dataSource={dataSource}
+        loading={loading}
+        dataSource={tableData ?? []}
         style={{ width: '80vw' }}
       />
     </div>
