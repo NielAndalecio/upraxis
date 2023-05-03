@@ -8,7 +8,7 @@ function Login() {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   let valid = false
-  const [wrongCreds, setWrongCreds] = useState(true)
+  const [wrongCreds, setWrongCreds] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const validateUserCredentials = async (username, password) => {
