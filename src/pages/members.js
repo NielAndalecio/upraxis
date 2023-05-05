@@ -122,7 +122,7 @@ function Members() {
   return (
     <div>
       {modals.showModal && <AddMember />}
-      {modals.showEditModa && <EditMember />}
+      {modals.showEditModal && <EditMember />}
       {modals.showDeleteModal && <DeleteMember />}
       {role === 'Admin' ? (
         <div>
