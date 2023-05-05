@@ -33,6 +33,7 @@ function EditMember() {
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const membersCollectionRef = collection(db, 'Members')
+  const role = localStorage.getItem('role')
 
   return (
     <>
@@ -103,7 +104,7 @@ function EditMember() {
             initialValue={selectedUser?.role}
             rules={[{ required: true, message: 'Please input role!' }]}
           >
-            <Input />
+            <Input disabled={role !== 'Admin'} />
           </Form.Item>
           <Form.Item
             label="ID Number"

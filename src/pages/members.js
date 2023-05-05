@@ -3,7 +3,6 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import React from 'react'
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import AddMember from '../components/modals/addMember'
 import DeleteMember from '../components/modals/deleteMember'
 import EditMember from '../components/modals/edit'
@@ -19,18 +18,20 @@ function Members() {
   const modals = useSelector((state) => state.modal)
   const states = useSelector((state) => state)
   const dispatch = useDispatch()
-
-  React.useEffect(() => {
-    const fetchMembers = async () => {
-      const user = await getDocs(
-        query(membersCollectionRef, where('username', '==', 'Niel'))
+  const fetchMembers = async () => {
+    const user = await getDocs(
+      query(
+        membersCollectionRef,
+        where('idNumber', '==', localStorage.getItem('idNumber'))
       )
-      const userData = user.docs.map((doc) => ({ ...doc.data() }))
+    )
 
-      const data = await getDocs(membersCollectionRef)
+    const data = await getDocs(membersCollectionRef)
+    const role = localStorage.getItem('role')
 
-      setRole(localStorage.getItem('role') || 'Staff')
+    setRole(role || 'Staff')
 
+    if (role === 'Admin') {
       setMembers(
         data.docs.map((doc, i) => ({
           key: doc.id,
@@ -40,27 +41,28 @@ function Members() {
           password: doc.data().password,
         }))
       )
+    } else {
+      setMembers(
+        user.docs.map((doc, i) => ({
+          key: doc.id,
+          authPerson: doc.data().username,
+          role: doc.data().role,
+          idNumber: doc.data().idNumber,
+          password: doc.data().password,
+        }))
+      )
     }
-
+  }
+  React.useEffect(() => {
     fetchMembers().then(() => {
       setLoading(false)
     })
   }, [])
 
   React.useEffect(() => {
-    const refetch = async () => {
-      const data = await getDocs(membersCollectionRef)
-      setMembers(
-        data.docs.map((doc, i) => ({
-          key: doc.id,
-          authPerson: doc.data().username,
-          role: doc.data().role,
-          idNumber: doc.data().idNumber,
-          password: doc.data().password,
-        }))
-      )
-    }
-    refetch()
+    fetchMembers().then(() => {
+      setLoading(false)
+    })
   }, [states])
 
   const columns = [
@@ -125,7 +127,11 @@ function Members() {
       {modals.showModal && <AddMember />}
       {modals.showEditModal && <EditMember />}
       {modals.showDeleteModal && <DeleteMember />}
-      {role === 'Admin' ? (
+      {role === 'loading' ? (
+        <div>
+          <Spin />
+        </div>
+      ) : (
         <div>
           <Space>
             <Button
@@ -147,19 +153,6 @@ function Members() {
             loading={loading}
             pagination={false}
           />
-        </div>
-      ) : (
-        <div>
-          {role === 'loading' ? (
-            <>
-              <Spin />
-            </>
-          ) : (
-            <>
-              <div>You need admin permissions to access this page</div>
-              <Link to={'/'}>Back to dashboard</Link>
-            </>
-          )}
         </div>
       )}
     </div>
