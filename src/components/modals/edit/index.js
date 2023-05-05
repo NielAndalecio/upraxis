@@ -25,8 +25,8 @@ function generatePassword() {
   return id
 }
 
-function AddMember() {
-  const showModal = useSelector((state) => state.modal.showModal)
+function EditMember() {
+  const showModal = useSelector((state) => state.modal.showEditModal)
   const [idNum, setIdNum] = useState('')
   const [pw, setPw] = useState('')
   const dispatch = useDispatch()
@@ -36,11 +36,11 @@ function AddMember() {
   return (
     <>
       <Modal
-        title="Add Member"
+        title="Edit Member"
         open={showModal}
         onCancel={() => {
           dispatch({
-            type: 'HIDE_MODAL',
+            type: 'HIDE_EDIT_MODAL',
           })
         }}
         footer={[
@@ -48,7 +48,7 @@ function AddMember() {
             key="cancel"
             onClick={() => {
               dispatch({
-                type: 'HIDE_MODAL',
+                type: 'HIDE_EDIT_MODAL',
               })
             }}
           >
@@ -62,7 +62,7 @@ function AddMember() {
               form.submit()
             }}
           >
-            Add Member
+            Save
           </Button>,
         ]}
       >
@@ -77,7 +77,7 @@ function AddMember() {
               password: pw,
             })
             dispatch({
-              type: 'HIDE_MODAL',
+              type: 'HIDE_EDIT_MODAL',
             })
           }}
         >
@@ -177,4 +177,4 @@ function AddMember() {
   )
 }
 
-export default AddMember
+export default EditMember

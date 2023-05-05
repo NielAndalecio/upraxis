@@ -64,6 +64,8 @@ function App() {
                     type: 'USER_LOGOUT',
                   })
                   localStorage.removeItem('isLogin')
+                  localStorage.removeItem('name')
+                  localStorage.removeItem('role')
                   redirectTo('/')
                 }}
               >

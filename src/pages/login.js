@@ -6,6 +6,11 @@ import { db } from '../firebase'
 
 function Login() {
   const user = useSelector((state) => state.user)
+  let userObj = {
+    authPerson: '',
+    role: '',
+    idNumber: '',
+  }
   const dispatch = useDispatch()
   let valid = false
   const [wrongCreds, setWrongCreds] = useState(false)
@@ -21,9 +26,14 @@ function Login() {
     userData.forEach((user) => {
       if (user.password === password) {
         valid = true
+        userObj = {
+          authPerson: user.username,
+          role: user.role,
+          idNumber: user.idNumber,
+        }
       }
     })
-    return valid
+    return { valid, userObj }
   }
 
   return (
@@ -50,15 +60,22 @@ function Login() {
               return true
             })
             await validateUserCredentials(data.username, data.password).then(
-              (isValid) => {
+              (results) => {
                 setLoading(() => {
                   return false
                 })
-                console.log({ isValid, wrongCreds })
-                if (isValid) {
+                if (results.valid) {
+                  localStorage.setItem('name', results.userObj.authPerson)
+                  localStorage.setItem('role', results.userObj.role)
+                  localStorage.setItem('idNumber', results.userObj.idNumber)
                   dispatch({
                     type: 'USER_LOGIN',
-                    payload: { name: 'Test', isLogin: true },
+                    payload: {
+                      name: results.userObj.authPerson,
+                      role: results.userObj.role,
+                      idNumber: results.userObj.idNumber,
+                      isLogin: true,
+                    },
                   })
                 } else {
                   setWrongCreds(() => {
