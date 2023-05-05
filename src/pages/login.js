@@ -109,7 +109,7 @@ function Login() {
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit" disabled={loading}>
-              {loading ? <Spin /> : 'Submit'}
+              {loading ? <Spin /> : 'Log in'}
             </Button>
           </Form.Item>
         </Form>
