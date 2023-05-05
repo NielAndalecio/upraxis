@@ -99,6 +99,7 @@ function Members() {
           <Space>
             <Button
               onClick={() => {
+                dispatch({ type: 'SELECT_MEMBER', payload: record })
                 dispatch({ type: 'SHOW_EDIT_MODAL' })
               }}
             >
@@ -144,6 +145,7 @@ function Members() {
             dataSource={members ?? []}
             style={{ width: '80vw' }}
             loading={loading}
+            pagination={false}
           />
         </div>
       ) : (

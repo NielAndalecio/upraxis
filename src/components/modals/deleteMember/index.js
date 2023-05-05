@@ -18,6 +18,7 @@ export default function DeleteMember() {
         cancelText="No"
         open={showModal}
         onCancel={() => {
+          dispatch({ type: 'CLEAR_MEMBER' })
           dispatch({ type: 'HIDE_DELETE_MODAL' })
         }}
         onOk={async () => {

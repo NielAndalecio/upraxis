@@ -1,5 +1,5 @@
 import { Button, Form, Input, Modal, Space } from 'antd'
-import { addDoc, collection } from 'firebase/firestore'
+import { collection, doc, getDoc, setDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from '../../../firebase'
@@ -70,11 +70,25 @@ function AddMember() {
           form={form}
           layout="vertical"
           onFinish={async (e) => {
-            addDoc(membersCollectionRef, {
-              username: e.authPerson,
-              role: e.role,
-              idNumber: idNum,
-              password: pw,
+            const docRef = doc(db, 'Members', idNum)
+
+            getDoc(docRef).then((doc) => {
+              if (doc.exists()) {
+                console.log('Document already exists, no changes will be made')
+              } else {
+                setDoc(docRef, {
+                  username: e.authPerson,
+                  role: e.role,
+                  idNumber: idNum,
+                  password: pw,
+                })
+                  .then(() => {
+                    console.log('Document created successfully')
+                  })
+                  .catch((error) => {
+                    console.error('Error creating document: ', error)
+                  })
+              }
             })
             dispatch({
               type: 'HIDE_MODAL',

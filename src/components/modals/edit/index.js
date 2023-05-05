@@ -1,5 +1,5 @@
 import { Button, Form, Input, Modal, Space } from 'antd'
-import { addDoc, collection } from 'firebase/firestore'
+import { collection, doc, updateDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from '../../../firebase'
@@ -27,8 +27,9 @@ function generatePassword() {
 
 function EditMember() {
   const showModal = useSelector((state) => state.modal.showEditModal)
-  const [idNum, setIdNum] = useState('')
-  const [pw, setPw] = useState('')
+  const selectedUser = useSelector((state) => state.user.selectedMember)
+  const [idNum, setIdNum] = useState(selectedUser?.idNumber ?? '')
+  const [pw, setPw] = useState(selectedUser?.password ?? '')
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const membersCollectionRef = collection(db, 'Members')
@@ -39,6 +40,7 @@ function EditMember() {
         title="Edit Member"
         open={showModal}
         onCancel={() => {
+          dispatch({ type: 'CLEAR_MEMBER' })
           dispatch({
             type: 'HIDE_EDIT_MODAL',
           })
@@ -70,7 +72,8 @@ function EditMember() {
           form={form}
           layout="vertical"
           onFinish={async (e) => {
-            addDoc(membersCollectionRef, {
+            const selectedDoc = doc(db, 'Members', selectedUser.key)
+            updateDoc(selectedDoc, {
               username: e.authPerson,
               role: e.role,
               idNumber: idNum,
@@ -84,6 +87,7 @@ function EditMember() {
           <Form.Item
             label="Authorized Person"
             name={'authPerson'}
+            initialValue={selectedUser?.authPerson}
             rules={[
               {
                 required: true,
@@ -96,6 +100,7 @@ function EditMember() {
           <Form.Item
             label={'Role'}
             name={'role'}
+            initialValue={selectedUser?.role}
             rules={[{ required: true, message: 'Please input role!' }]}
           >
             <Input />
@@ -103,6 +108,7 @@ function EditMember() {
           <Form.Item
             label="ID Number"
             name={'idNumber'}
+            initialValue={selectedUser?.idNumber}
             rules={[
               {
                 validator: () => {
@@ -117,6 +123,7 @@ function EditMember() {
             <Space.Compact style={{ width: '100%' }}>
               <Input
                 value={idNum}
+                disabled
                 onChange={(e) => {
                   setIdNum(() => {
                     return e.target.value
@@ -126,6 +133,7 @@ function EditMember() {
 
               <Button
                 size="small"
+                disabled
                 onClick={() => {
                   setIdNum(() => {
                     return generateId()
@@ -161,6 +169,7 @@ function EditMember() {
               />
               <Button
                 size="small"
+                disabled
                 onClick={() => {
                   setPw(() => {
                     return generatePassword()
