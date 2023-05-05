@@ -82,7 +82,7 @@ function Members() {
       title: 'ID Number',
       dataIndex: 'idNumber',
       key: 'idNumber',
-      sorter: (a, b) => a.idNumber - b.idNumber,
+      sorter: (a, b) => a.idNumber.localeCompare(b.idNumber),
     },
     {
       title: 'Password',
