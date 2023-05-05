@@ -61,7 +61,7 @@ function Members() {
       )
     }
     refetch()
-  }, [states, membersCollectionRef])
+  }, [states])
 
   const columns = [
     {
