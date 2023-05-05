@@ -16,7 +16,7 @@ function Members() {
   const [role, setRole] = React.useState('loading')
 
   const membersCollectionRef = collection(db, 'Members')
-  const showModal = useSelector((state) => state.modal.showModal)
+  const modals = useSelector((state) => state.modal)
   const states = useSelector((state) => state)
   const dispatch = useDispatch()
 
@@ -121,9 +121,9 @@ function Members() {
 
   return (
     <div>
-      <AddMember />
-      <EditMember />
-      <DeleteMember />
+      {modals.showModal && <AddMember />}
+      {modals.showEditModa && <EditMember />}
+      {modals.showDeleteModal && <DeleteMember />}
       {role === 'Admin' ? (
         <div>
           <Space>
