@@ -1,5 +1,11 @@
 import { Button, Space, Spin, Table } from 'antd'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import {
+  Firestore,
+  collection,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore'
 import React from 'react'
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
@@ -45,6 +51,14 @@ function Members() {
     fetchMembers().then(() => {
       setLoading(false)
     })
+
+    const unsubscribe = Firestore()
+      .collection('your-collection')
+      .onSnapshot((snapshot) => {
+        const updatedData = snapshot.docs.map((doc) => doc.data())
+        setMembers(updatedData)
+      })
+    return unsubscribe
   }, [])
 
   React.useEffect(() => {
