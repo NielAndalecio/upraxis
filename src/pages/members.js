@@ -134,16 +134,18 @@ function Members() {
       ) : (
         <div>
           <Space>
-            <Button
-              type="link"
-              onClick={() => {
-                dispatch({
-                  type: 'SHOW_MODAL',
-                })
-              }}
-            >
-              Add Member
-            </Button>
+            {role === 'Admin' && (
+              <Button
+                type="link"
+                onClick={() => {
+                  dispatch({
+                    type: 'SHOW_MODAL',
+                  })
+                }}
+              >
+                Add Member
+              </Button>
+            )}
           </Space>
           <Table
             bordered={true}
