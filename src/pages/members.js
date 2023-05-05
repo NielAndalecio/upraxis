@@ -133,6 +133,14 @@ function Members() {
         </div>
       ) : (
         <div>
+          <Table
+            bordered={true}
+            columns={columns}
+            dataSource={members ?? []}
+            style={{ width: '80vw' }}
+            loading={loading}
+            pagination={false}
+          />
           <Space>
             {role === 'Admin' && (
               <Button
@@ -147,14 +155,6 @@ function Members() {
               </Button>
             )}
           </Space>
-          <Table
-            bordered={true}
-            columns={columns}
-            dataSource={members ?? []}
-            style={{ width: '80vw' }}
-            loading={loading}
-            pagination={false}
-          />
         </div>
       )}
     </div>
