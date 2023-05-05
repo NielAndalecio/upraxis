@@ -2,6 +2,7 @@ import { Button, Form, Input, Space, Spin } from 'antd'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import upraxis from '../assets/upraxislogo.png'
 import { db } from '../firebase'
 
 function Login() {
@@ -47,7 +48,7 @@ function Login() {
           backgroundColor: '#FAFAFA',
         }}
       >
-        <h2>Upraxis</h2>
+        <img src={upraxis} alt="" />
         <Form
           name="basic"
           labelCol={{ span: 8 }}

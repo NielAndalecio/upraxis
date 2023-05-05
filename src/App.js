@@ -3,6 +3,7 @@ import Sider from 'antd/es/layout/Sider'
 import { useDispatch } from 'react-redux'
 import { Link, Route, Routes } from 'react-router-dom'
 import NotFound from './404'
+import bgImg from './assets/bg.jpg'
 import { useAuth } from './common/hooks/useAuth'
 import { ModalProvider } from './common/hooks/useModal'
 import { Logo } from './components/icons/logo'
@@ -30,6 +31,7 @@ function App() {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
+          backgroundImage: !isAuth && `url(${bgImg})`,
         }}
       >
         {isAuth && (
