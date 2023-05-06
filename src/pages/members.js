@@ -3,6 +3,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import React from 'react'
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
+import AlertProvider from '../components/alertProvider'
 import AddMember from '../components/modals/addMember'
 import DeleteMember from '../components/modals/deleteMember'
 import EditMember from '../components/modals/edit'
@@ -133,6 +134,7 @@ function Members() {
         </div>
       ) : (
         <div>
+          <AlertProvider />
           <Table
             bordered={true}
             columns={columns}

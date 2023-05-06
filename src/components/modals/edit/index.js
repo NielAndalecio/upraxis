@@ -74,15 +74,35 @@ function EditMember() {
           layout="vertical"
           onFinish={async (e) => {
             const selectedDoc = doc(db, 'Members', selectedUser.key)
+            dispatch({
+              type: 'HIDE_EDIT_MODAL',
+            })
             updateDoc(selectedDoc, {
               username: e.authPerson,
               role: e.role,
               idNumber: idNum,
               password: pw,
             })
-            dispatch({
-              type: 'HIDE_EDIT_MODAL',
-            })
+              .then(() => {
+                dispatch({
+                  type: 'SHOW_ALERT',
+                  payload: {
+                    alertIsOpen: true,
+                    alertType: 'success',
+                    alertMessage: 'Edit successful!',
+                  },
+                })
+              })
+              .catch((error) => {
+                dispatch({
+                  type: 'SHOW_ALERT',
+                  payload: {
+                    alertIsOpen: true,
+                    alertType: 'error',
+                    alertMessage: `Error creating document: ${error}`,
+                  },
+                })
+              })
           }}
         >
           <Form.Item

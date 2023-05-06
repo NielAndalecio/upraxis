@@ -83,6 +83,7 @@ function App() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
+            padding: '20px',
           }}
         >
           <Routes>

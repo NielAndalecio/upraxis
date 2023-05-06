@@ -74,7 +74,15 @@ function AddMember() {
 
             getDoc(docRef).then((doc) => {
               if (doc.exists()) {
-                console.log('Document already exists, no changes will be made')
+                dispatch({
+                  type: 'SHOW_ALERT',
+                  payload: {
+                    alertIsOpen: true,
+                    alertType: 'warning',
+                    alertMessage:
+                      'Document already exists, no changes will be made!',
+                  },
+                })
               } else {
                 setDoc(docRef, {
                   username: e.authPerson,
@@ -83,10 +91,24 @@ function AddMember() {
                   password: pw,
                 })
                   .then(() => {
-                    console.log('Document created successfully')
+                    dispatch({
+                      type: 'SHOW_ALERT',
+                      payload: {
+                        alertIsOpen: true,
+                        alertType: 'success',
+                        alertMessage: 'Member added successfully!',
+                      },
+                    })
                   })
                   .catch((error) => {
-                    console.error('Error creating document: ', error)
+                    dispatch({
+                      type: 'SHOW_ALERT',
+                      payload: {
+                        alertIsOpen: true,
+                        alertType: 'error',
+                        alertMessage: `Error creating document: ${error}`,
+                      },
+                    })
                   })
               }
             })

@@ -25,6 +25,26 @@ export default function DeleteMember() {
           const userDoc = doc(db, 'Members', selectedMember.key)
           dispatch({ type: 'HIDE_DELETE_MODAL' })
           await deleteDoc(userDoc)
+            .then(() => {
+              dispatch({
+                type: 'SHOW_ALERT',
+                payload: {
+                  alertIsOpen: true,
+                  alertType: 'success',
+                  alertMessage: 'Member deleted successfully!',
+                },
+              })
+            })
+            .catch((error) => {
+              dispatch({
+                type: 'SHOW_ALERT',
+                payload: {
+                  alertIsOpen: true,
+                  alertType: 'error',
+                  alertMessage: `Error creating document: ${error}`,
+                },
+              })
+            })
         }}
       >
         <Space align="center">
