@@ -61,10 +61,11 @@ function Members() {
   }, [])
 
   React.useEffect(() => {
+    console.log('UPDATING...')
     fetchMembers().then(() => {
       setLoading(false)
     })
-  }, [states])
+  }, [states.alert.alertIndexes])
 
   const columns = [
     {
