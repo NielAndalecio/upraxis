@@ -1,24 +1,37 @@
-import { Alert, Space } from 'antd'
+import { Space } from 'antd'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import AlertComponent from './alert'
 
 export default function AlertProvider() {
   const alertDetails = useSelector((state) => state.alert)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (alertDetails.alertIsOpen) {
+    if (alertDetails.alerts?.length > 0) {
+      let lowest = 0
+      alertDetails.alerts?.forEach((item) => {
+        if (lowest < item.index) {
+          lowest = item.index
+        }
+      })
       setTimeout(() => {
         dispatch({
-          type: 'CLOSE_ALERT',
+          type: 'REMOVE_ALERT',
+          payload: lowest,
         })
       }, 5000)
+    } else {
+      dispatch({
+        type: 'CLOSE_ALERT',
+      })
     }
-  }, [alertDetails.alertIsOpen])
+    return clearTimeout()
+  }, [alertDetails.alerts])
 
   return (
     <>
-      {alertDetails.alertIsOpen && (
+      {alertDetails.alerts?.length > 0 && (
         <Space
           style={{
             position: 'absolute',
@@ -26,20 +39,18 @@ export default function AlertProvider() {
             right: 120,
             top: 20,
           }}
+          direction="vertical"
         >
-          <Alert
-            onClose={() => {
-              setTimeout(() => {
-                dispatch({
-                  type: 'CLOSE_ALERT',
-                })
-              })
-            }}
-            message={alertDetails.alertMessage}
-            type={alertDetails.alertType}
-            showIcon
-            closable
-          />
+          {alertDetails.alerts.map((alert, i) => {
+            return (
+              <AlertComponent
+                index={alert.index}
+                message={alert.alertMessage}
+                type={alert.alertType}
+                key={i}
+              />
+            )
+          })}
         </Space>
       )}
     </>

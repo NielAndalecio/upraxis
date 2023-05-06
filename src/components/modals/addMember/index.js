@@ -77,7 +77,6 @@ function AddMember() {
                 dispatch({
                   type: 'SHOW_ALERT',
                   payload: {
-                    alertIsOpen: true,
                     alertType: 'warning',
                     alertMessage:
                       'Document already exists, no changes will be made!',
@@ -94,7 +93,6 @@ function AddMember() {
                     dispatch({
                       type: 'SHOW_ALERT',
                       payload: {
-                        alertIsOpen: true,
                         alertType: 'success',
                         alertMessage: 'Member added successfully!',
                       },
@@ -104,7 +102,6 @@ function AddMember() {
                     dispatch({
                       type: 'SHOW_ALERT',
                       payload: {
-                        alertIsOpen: true,
                         alertType: 'error',
                         alertMessage: `Error creating document: ${error}`,
                       },

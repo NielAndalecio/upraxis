@@ -29,7 +29,6 @@ export default function DeleteMember() {
               dispatch({
                 type: 'SHOW_ALERT',
                 payload: {
-                  alertIsOpen: true,
                   alertType: 'success',
                   alertMessage: 'Member deleted successfully!',
                 },
@@ -39,7 +38,6 @@ export default function DeleteMember() {
               dispatch({
                 type: 'SHOW_ALERT',
                 payload: {
-                  alertIsOpen: true,
                   alertType: 'error',
                   alertMessage: `Error creating document: ${error}`,
                 },

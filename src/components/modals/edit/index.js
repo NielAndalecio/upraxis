@@ -87,7 +87,6 @@ function EditMember() {
                 dispatch({
                   type: 'SHOW_ALERT',
                   payload: {
-                    alertIsOpen: true,
                     alertType: 'success',
                     alertMessage: 'Edit successful!',
                   },
@@ -97,7 +96,6 @@ function EditMember() {
                 dispatch({
                   type: 'SHOW_ALERT',
                   payload: {
-                    alertIsOpen: true,
                     alertType: 'error',
                     alertMessage: `Error creating document: ${error}`,
                   },
