@@ -1,6 +1,6 @@
 import { Button, Form, Input, Modal, Space } from 'antd'
 import { collection, doc, updateDoc } from 'firebase/firestore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from '../../../firebase'
 function generateId() {
@@ -34,6 +34,16 @@ function EditMember() {
   const [form] = Form.useForm()
   const membersCollectionRef = collection(db, 'Members')
   const role = localStorage.getItem('role')
+  const [isTouched, setIsTouched] = useState(false)
+  const [newVal, setNewVal] = useState({ ...selectedUser })
+
+  useEffect(() => {
+    if (JSON.stringify(newVal) !== JSON.stringify(selectedUser)) {
+      setIsTouched(true)
+    } else {
+      setIsTouched(false)
+    }
+  }, [newVal])
 
   return (
     <>
@@ -61,6 +71,7 @@ function EditMember() {
             key="submit"
             type="primary"
             htmlType="submit"
+            disabled={!isTouched}
             onClick={async () => {
               form.submit()
             }}
@@ -114,7 +125,11 @@ function EditMember() {
               },
             ]}
           >
-            <Input />
+            <Input
+              onChange={(e) => {
+                setNewVal({ ...newVal, authPerson: e.target.value })
+              }}
+            />
           </Form.Item>
           <Form.Item
             label={'Role'}
@@ -122,7 +137,12 @@ function EditMember() {
             initialValue={selectedUser?.role}
             rules={[{ required: true, message: 'Please input role!' }]}
           >
-            <Input disabled={role !== 'Admin'} />
+            <Input
+              disabled={role !== 'Admin'}
+              onChange={(e) => {
+                setNewVal({ ...newVal, role: e.target.value })
+              }}
+            />
           </Form.Item>
           <Form.Item
             label="ID Number"
@@ -181,6 +201,7 @@ function EditMember() {
               <Input
                 value={pw}
                 onChange={(e) => {
+                  setNewVal({ ...newVal, password: e.target.value })
                   setPw(() => {
                     return e.target.value
                   })
