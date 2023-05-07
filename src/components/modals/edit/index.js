@@ -90,6 +90,7 @@ function EditMember() {
             })
             updateDoc(selectedDoc, {
               username: e.authPerson,
+              usernameLowercase: e.authPerson.toLowerCase(),
               role: e.role,
               idNumber: idNum,
               password: pw,

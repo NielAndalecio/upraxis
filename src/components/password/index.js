@@ -5,6 +5,7 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 function Password({ text }) {
   const [showPassword, setShowPassword] = useState(false)
   const passwordText = showPassword ? text : '*'.repeat(text.length)
+
   return (
     <div>
       <Button onClick={() => setShowPassword(!showPassword)}>

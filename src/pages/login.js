@@ -20,10 +20,14 @@ function Login() {
   const validateUserCredentials = async (username, password) => {
     const membersCollectionRef = collection(db, 'Members')
     const user = await getDocs(
-      query(membersCollectionRef, where('username', '==', username))
+      query(
+        membersCollectionRef,
+        where('usernameLowercase', '==', username.toLowerCase())
+      )
     )
     const userData = user.docs.map((doc) => ({ ...doc.data() }))
 
+    console.log({ userData })
     userData.forEach((user) => {
       if (user.password === password) {
         valid = true
